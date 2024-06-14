@@ -19,14 +19,12 @@ const RoomContext = createContext<{
   setRoomState: (state: RoomState) => void;
   peers: Peer[];
   self: Peer | null;
-  masterPeerId: string | null;
 }>({
   room: null,
   roomState: RoomState.Waiting,
   setRoomState: () => {},
   peers: [],
   self: null,
-  masterPeerId: null
 });
 
 export const useRoomContext = () => {
@@ -37,13 +35,15 @@ export const useRoomContext = () => {
   return context;
 };
 
+// TODO: Remove the master logic and let all peers decide the room state
+// NOTE: When choosing a restaurant on each peer, each peer maintain it's own state, so when I choose a restaurant I notify the other peers and they update their state
+
 const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode }) => {
   const [myRandomName, setMyRandomName] = useState<string>('');
 
   // P2P States
   const [roomState, setRoomState] = useState<RoomState>(RoomState.Waiting);
   const [peers, setPeers] = useState<Peer[]>([]);
-  const [masterPeerId, setMasterPeerId] = useState<string | null>(null);
 
   // Room setup
   const config: BaseRoomConfig & RelayConfig = { appId: 'onmangeou' };
@@ -51,52 +51,30 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   
   // Room actions
   const [sendRoomState, getRoomState] = room.makeAction('room-state');
-  const [sendMaster, getMaster] = room.makeAction('master');
   const [sendName, getName] = room.makeAction('name');
 
   // Methods
-  const chooseMaster = (peersList: string[]) => {
-    console.log('peers', peersList);
-    const randomPeer = peersList[Math.floor(Math.random() * peersList.length)];
-    setMasterPeerId(randomPeer);
-    sendMaster({ masterId: randomPeer });
-  };
-
   const changeRoomState = (state: RoomState) => {
     setRoomState(state);
-    sendRoomState({ state, setterId: selfId });
+    sendRoomState({ state });
   }
 
   // Room listeners
   room.onPeerJoin(peerId => {
     console.log('[Event] peer join : ', peerId);
 
-    if (roomState !== RoomState.Waiting && masterPeerId !== null) {
-      sendMaster({ masterId: masterPeerId });
-      sendRoomState({ state: roomState, setterId: selfId });
+    if (roomState !== RoomState.Waiting) {
       return; // Don't add new peers if the session is already started
     }
 
     setPeers(peers => [...peers, { id: peerId, name: '...' }]);
-    sendName({ name: myRandomName });
-    
-    if (masterPeerId === null && roomState === RoomState.Waiting) {
-      const allPeersId = peers.map(peer => peer.id);
-      allPeersId.push(peerId, selfId);
-      chooseMaster(allPeersId);
-    }
+    sendName({ name: myRandomName })
   });
 
   room.onPeerLeave(peerId => {
     console.log('[Event] peer leave : ', peerId);
 
     setPeers(peers => peers.filter(peer => peer.id !== peerId));
-
-    if(masterPeerId === peerId) {
-      setMasterPeerId(null);
-      setRoomState(RoomState.Waiting);
-      chooseMaster(peers.map(peer => peer.id));
-    }
   });
 
   getName((data, peerId) => {
@@ -114,21 +92,11 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     });
   });
 
-  getMaster((data) => {
-    console.log('[Event] master : ', data);
-
-    const masterData = data as { masterId: string };
-    if (masterPeerId !== masterData.masterId) {
-      setMasterPeerId(masterData.masterId);
-      sendMaster({ masterId: masterData.masterId });
-    }
-  });
-
-  getRoomState((data) => {
+  getRoomState((data, peerId) => {
     console.log('[Event] room state : ', data);
 
     const roomStateData = data as { state: RoomState, setterId: string };
-    if(roomStateData.setterId !== masterPeerId && masterPeerId) return;
+    if(!peers.find((peer) => peer.id === peerId)) return; // Ignore messages from unknown peers
     setRoomState(roomStateData.state);
   });
 
@@ -139,6 +107,14 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     }));
   }, []);
 
+  useEffect(() => {
+    console.log("Checking empty room");
+    if (peers.length <= 0 && roomState !== RoomState.Waiting) {
+      console.log("Empty room, resetting room state");
+      setRoomState(RoomState.Finished);
+    }
+  }, [peers, roomState]);
+
   return (
     <RoomContext.Provider value={{
       room,
@@ -146,7 +122,6 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
       setRoomState: changeRoomState,
       peers,
       self: { id: selfId, name: myRandomName },
-      masterPeerId
     }}>
       {children}
     </RoomContext.Provider>

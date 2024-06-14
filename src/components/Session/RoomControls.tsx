@@ -2,13 +2,11 @@ import { RoomState, useRoomContext } from "./Room";
 
 const RoomControls = () => {
 
-    const masterId = useRoomContext().masterPeerId;
-    const self = useRoomContext().self;
     const roomState = useRoomContext().roomState;
     const setRoomState = useRoomContext().setRoomState;
 
     const startSession = () => {
-        if(self?.id === masterId && roomState === RoomState.Waiting) {
+        if(roomState === RoomState.Waiting) {
             setRoomState(RoomState.Playing);
         }
     }
