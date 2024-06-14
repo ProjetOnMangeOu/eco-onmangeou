@@ -18,7 +18,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/:sessionId",
+        path: "/session",
         element: <Session />,
       },
     ],
