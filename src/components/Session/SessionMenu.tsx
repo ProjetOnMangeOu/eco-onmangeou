@@ -21,8 +21,13 @@ const SessionMenu = () => {
         className='w-full p-2 rounded-lg text-neutral-900'
         value={sessionId}
         onChange={(e) => setSessionId(e.target.value)}
-        onClick={() => copyToClipboard(sessionId)}
       />
+      <button
+        className='bg-neutral-400 px-4 py-2 w-full rounded-lg text-neutral-900'
+        onClick={() => copyToClipboard(sessionId)}
+      >
+        Copy
+      </button>
       <button
         className='bg-neutral-400 px-4 py-2 w-full rounded-lg text-neutral-900'
         onClick={() => setSessionId(uuidv4())}
