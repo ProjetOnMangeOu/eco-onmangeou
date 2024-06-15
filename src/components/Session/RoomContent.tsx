@@ -1,4 +1,5 @@
-import RestaurantCard from "../RestaurantCard";
+import ChooseRestaurants from "./ChooseRestaurants";
+import Results from "./Results";
 import { RoomState, useRoomContext } from "./Room";
 import SelfGeo from "./SelfGeo";
 
@@ -26,8 +27,8 @@ const RoomContent = () => {
             {roomState === RoomState.Playing && (
                 <>
                     <h2 className="text-xl font-bold">Playing</h2>
-                    <RestaurantCard />
-                    {/* Add live results component here */}
+                    <ChooseRestaurants />
+                    <Results />
                 </>
             )}
 

@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { BaseRoomConfig, RelayConfig, Room as TrysteroRoom, joinRoom, selfId } from "trystero/nostr";
 import { animals, uniqueNamesGenerator } from "unique-names-generator";
+import { Restaurant } from "../../lib/restaurants";
 
 export type Peer = {
   id: string;
@@ -11,6 +12,11 @@ export type GeoLocation = {
   lat: number;
   long: number;
 };
+
+export type LikedRestaurants = {
+  id: string;
+  name: string;
+}
 
 // eslint-disable-next-line react-refresh/only-export-components
 export enum RoomState {
@@ -27,6 +33,8 @@ const RoomContext = createContext<{
   self: Peer | null;
   geoLocation: GeoLocation;
   setGeoLocation: (geo: GeoLocation) => void;
+  likedRestaurants: LikedRestaurants[];
+  likeARestaurant: (restaurant: Restaurant) => void;
 }>({
   room: null,
   roomState: RoomState.Waiting,
@@ -34,7 +42,9 @@ const RoomContext = createContext<{
   peers: [],
   self: null,
   geoLocation: { lat: 50.6292, long: 3.0573 },
-  setGeoLocation: () => {},
+  setGeoLocation: () => { },
+  likedRestaurants: [],
+  likeARestaurant: () => {},
 });
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -55,6 +65,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   // P2P States
   const [roomState, setRoomState] = useState<RoomState>(RoomState.Waiting);
   const [peers, setPeers] = useState<Peer[]>([]);
+  const [likedRestaurants, setLikedRestaurants] = useState<LikedRestaurants[]>([]);
 
   // Room setup
   const config: BaseRoomConfig & RelayConfig = { appId: 'onmangeou' };
@@ -63,6 +74,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   // Room actions
   const [sendRoomState, getRoomState] = room.makeAction('room-state');
   const [sendName, getName] = room.makeAction('name');
+  const [sendLikedRestaurant, getLikedRestaurant] = room.makeAction('liked-place');
 
   // Methods
   const changeRoomState = (state: RoomState) => {
@@ -85,6 +97,15 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     } else {
       console.log('[Geo] Is not available');
     }
+  };
+
+  const likeARestaurant = (restaurant: Restaurant) => {
+    const likedRestaurant: LikedRestaurants = {
+      id: restaurant.documentId,
+      name: restaurant.name,
+    };
+    setLikedRestaurants((prevState) => [...prevState, likedRestaurant]);
+    sendLikedRestaurant(likedRestaurant);
   };
 
   // Room listeners
@@ -128,6 +149,14 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     setRoomState(roomStateData.state);
   });
 
+  getLikedRestaurant((data, peerId) => {
+    console.log('[Event] liked restaurant : ', data);
+
+    const likedRestaurantData = data as LikedRestaurants;
+    if(!peers.find((peer) => peer.id === peerId)) return; // Ignore likes from unknown peers
+    setLikedRestaurants((prevState) => [...prevState, likedRestaurantData]);
+  });
+
   // Initial setup
   useEffect(() => {
     getGeoLocation();
@@ -152,6 +181,8 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
       self: { id: selfId, name: myRandomName },
       geoLocation,
       setGeoLocation,
+      likedRestaurants,
+      likeARestaurant,
     }}>
       {children}
     </RoomContext.Provider>
