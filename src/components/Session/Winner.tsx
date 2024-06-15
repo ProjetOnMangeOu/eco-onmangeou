@@ -20,8 +20,6 @@ const Winner = () => {
         return likedRestaurants.find((restaurant) => restaurant.documentId === winnerId);
     }, [likedRestaurants]);
 
-    console.log('Winner', winner);
-
     return (
         <>
             <h2>And the winner is ...</h2>
