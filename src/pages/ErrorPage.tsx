@@ -1,9 +1,9 @@
-import { useRouteError } from "react-router-dom"
+import { useRouteError } from "react-router-dom";
 
 export const ErrorPage = () => {
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const error: any = useRouteError();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const error: any = useRouteError();
 
   return (
     <div id="error-page">
@@ -13,5 +13,5 @@ export const ErrorPage = () => {
         <i>{error.statusText || error.message}</i>
       </p>
     </div>
-  )
-}
+  );
+};

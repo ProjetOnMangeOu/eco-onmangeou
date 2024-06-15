@@ -7,6 +7,12 @@ export type Peer = {
   name: string;
 };
 
+export type GeoLocation = {
+  lat: number;
+  long: number;
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
 export enum RoomState {
   Waiting = 'waiting',
   Playing = 'playing',
@@ -19,14 +25,19 @@ const RoomContext = createContext<{
   setRoomState: (state: RoomState) => void;
   peers: Peer[];
   self: Peer | null;
+  geoLocation: GeoLocation;
+  setGeoLocation: (geo: GeoLocation) => void;
 }>({
   room: null,
   roomState: RoomState.Waiting,
   setRoomState: () => {},
   peers: [],
   self: null,
+  geoLocation: { lat: 50.6292, long: 3.0573 },
+  setGeoLocation: () => {},
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useRoomContext = () => {
   const context = useContext(RoomContext);
   if (!context) {
@@ -35,11 +46,11 @@ export const useRoomContext = () => {
   return context;
 };
 
-// TODO: Remove the master logic and let all peers decide the room state
 // NOTE: When choosing a restaurant on each peer, each peer maintain it's own state, so when I choose a restaurant I notify the other peers and they update their state
 
 const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode }) => {
   const [myRandomName, setMyRandomName] = useState<string>('');
+  const [geoLocation, setGeoLocation] = useState<GeoLocation>({ lat: 50.6292, long: 3.0573 });
 
   // P2P States
   const [roomState, setRoomState] = useState<RoomState>(RoomState.Waiting);
@@ -57,7 +68,24 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   const changeRoomState = (state: RoomState) => {
     setRoomState(state);
     sendRoomState({ state });
-  }
+  };
+
+  const getGeoLocation = () => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        // Success
+        (position) => {
+          setGeoLocation({ lat: position.coords.latitude, long: position.coords.longitude });
+        },
+        // Error
+        (error) => {
+          console.error('[Geo] Error', error);
+        }
+      );
+    } else {
+      console.log('[Geo] Is not available');
+    }
+  };
 
   // Room listeners
   room.onPeerJoin(peerId => {
@@ -68,7 +96,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     }
 
     setPeers(peers => [...peers, { id: peerId, name: '...' }]);
-    sendName({ name: myRandomName })
+    sendName({ name: myRandomName });
   });
 
   room.onPeerLeave(peerId => {
@@ -100,7 +128,9 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     setRoomState(roomStateData.state);
   });
 
+  // Initial setup
   useEffect(() => {
+    getGeoLocation();
     setMyRandomName(uniqueNamesGenerator({
       dictionaries: [animals],
       style: 'capital'
@@ -108,9 +138,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   }, []);
 
   useEffect(() => {
-    console.log("Checking empty room");
     if (peers.length <= 0 && roomState !== RoomState.Waiting) {
-      console.log("Empty room, resetting room state");
       setRoomState(RoomState.Finished);
     }
   }, [peers, roomState]);
@@ -122,6 +150,8 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
       setRoomState: changeRoomState,
       peers,
       self: { id: selfId, name: myRandomName },
+      geoLocation,
+      setGeoLocation,
     }}>
       {children}
     </RoomContext.Provider>

@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 const SessionMenu = () => {
-    const [sessionId, setSessionId] = useState<string>('');
+  const [sessionId, setSessionId] = useState<string>('');
 
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
-  }
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
   
   useEffect(() => {
     setSessionId(uuidv4());
@@ -32,7 +32,7 @@ const SessionMenu = () => {
         to={`/session?id=${sessionId}`}
       >Join Session</Link>
     </div>
-  )
-}
+  );
+};
 
 export default SessionMenu;
