@@ -2,6 +2,7 @@ import ChooseRestaurants from "./ChooseRestaurants";
 import Results from "./Results";
 import { RoomState, useRoomContext } from "./Room";
 import SelfGeo from "./SelfGeo";
+import Winner from "./Winner";
 
 const RoomContent = () => {
 
@@ -35,6 +36,7 @@ const RoomContent = () => {
             {roomState === RoomState.Finished && (
                 <>
                     <h2 className="text-xl font-bold">Session finished</h2>
+                    <Winner />
                     {/* Display the winner */}
                 </>
             )}

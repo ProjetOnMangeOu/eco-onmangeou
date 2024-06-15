@@ -33,7 +33,7 @@ const RoomContext = createContext<{
   self: Peer | null;
   geoLocation: GeoLocation;
   setGeoLocation: (geo: GeoLocation) => void;
-  likedRestaurants: LikedRestaurants[];
+  likedRestaurants: Restaurant[];
   likeARestaurant: (restaurant: Restaurant) => void;
 }>({
   room: null,
@@ -65,7 +65,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   // P2P States
   const [roomState, setRoomState] = useState<RoomState>(RoomState.Waiting);
   const [peers, setPeers] = useState<Peer[]>([]);
-  const [likedRestaurants, setLikedRestaurants] = useState<LikedRestaurants[]>([]);
+  const [likedRestaurants, setLikedRestaurants] = useState<Restaurant[]>([]);
 
   // Room setup
   const config: BaseRoomConfig & RelayConfig = { appId: 'onmangeou' };
@@ -100,12 +100,8 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   };
 
   const likeARestaurant = (restaurant: Restaurant) => {
-    const likedRestaurant: LikedRestaurants = {
-      id: restaurant.documentId,
-      name: restaurant.name,
-    };
-    setLikedRestaurants((prevState) => [...prevState, likedRestaurant]);
-    sendLikedRestaurant(likedRestaurant);
+    setLikedRestaurants((prevState) => [...prevState, restaurant]);
+    sendLikedRestaurant({ ...restaurant });
   };
 
   // Room listeners
@@ -152,7 +148,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   getLikedRestaurant((data, peerId) => {
     console.log('[Event] liked restaurant : ', data);
 
-    const likedRestaurantData = data as LikedRestaurants;
+    const likedRestaurantData = data as unknown as Restaurant;
     if(!peers.find((peer) => peer.id === peerId)) return; // Ignore likes from unknown peers
     setLikedRestaurants((prevState) => [...prevState, likedRestaurantData]);
   });

@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useRoomContext } from "./Room";
+import RestaurantCard from "../RestaurantCard";
 
-const Results = () => {
+const Winner = () => {
 
     const likedRestaurants = useRoomContext().likedRestaurants;
 
-    const votes = useMemo(() => {
+    const winner = useMemo(() => {
         const votes: { [key: string]: number } = {};
         likedRestaurants.forEach((restaurant) => {
             if (votes[restaurant.documentId]) {
@@ -14,21 +15,19 @@ const Results = () => {
                 votes[restaurant.documentId] = 1;
             }
         });
-        return votes;
+
+        const winnerId = Object.keys(votes).reduce((a, b) => votes[a] > votes[b] ? a : b);
+        return likedRestaurants.find((restaurant) => restaurant.documentId === winnerId);
     }, [likedRestaurants]);
+
+    console.log('Winner', winner);
 
     return (
         <>
-            <h2 className="text-xl font-bold">Results</h2>
-            <ul>
-                {Object.keys(votes).map((restaurantId) => (
-                    <li key={restaurantId}>
-                        {likedRestaurants.find((res) => res.documentId === restaurantId)?.name} : {votes[restaurantId]}
-                    </li>
-                ))}
-            </ul>
+            <h2>And the winner is ...</h2>
+            <RestaurantCard restaurant={winner!} />
         </>
     );
 };
 
-export default Results;
+export default Winner;
