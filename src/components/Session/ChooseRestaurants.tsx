@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { RoomState, useRoomContext } from "./Room";
 import RestaurantCard from "../RestaurantCard";
+import thumbDown from "../../assets/thumb-down-dynamic-color.avif";
+import thumbUp from "../../assets/thumb-up-dynamic-color.avif";
 
 const ChooseRestaurants = () => {
     const [displayedRestaurantIndex, setDisplayedRestaurantIndex] = useState<number>(0);
@@ -48,7 +50,7 @@ const ChooseRestaurants = () => {
                         className="justify-self-end order-1 p-2 rounded-full bg-secondary-500 hover:bg-secondary-400 w-fit transition-all duration-300 hover:shadow-xl"
                         onClick={() => nextRestaurant(false)}
                     >
-                        <img src="./src/assets/thumb-down-dynamic-color.avif" alt="dislike" className="w-12 h-12" />
+                        <img src={thumbDown} alt="dislike" className="w-12 h-12" />
                     </button>
                     <div className="col-span-2 w-full flex justify-center">
                         <RestaurantCard restaurant={restaurantList[displayedRestaurantIndex]} />
@@ -57,7 +59,7 @@ const ChooseRestaurants = () => {
                         className="justify-self-start order-2 p-2 rounded-full bg-secondary-500 hover:bg-secondary-400 marker:w-fit transition-all duration-300 hover:shadow-xl"
                         onClick={() => nextRestaurant()}
                     >
-                        <img src="./src/assets/thumb-up-dynamic-color.avif" alt="like" className="w-12 h-12" />
+                        <img src={thumbUp} alt="like" className="w-12 h-12" />
                     </button>
                 </>
             )}

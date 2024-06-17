@@ -1,4 +1,6 @@
 import { Restaurant } from "../lib/restaurants";
+import starColor from "../assets/star-dynamic-color.avif";
+import starClay from "../assets/star-dynamic-clay.avif";
 
 const RestaurantCard = ({ restaurant }: { restaurant: Restaurant }) => {
     return (
@@ -19,7 +21,7 @@ const RestaurantCard = ({ restaurant }: { restaurant: Restaurant }) => {
                     <p>{restaurant.googleMapRating}</p>
                     {
                         Array.from({ length: 5 }).map((_, index) => (
-                            <img key={index} src={index < Math.round(restaurant.googleMapRating) ? "./src/assets/star-dynamic-color.avif" : "./src/assets/star-dynamic-clay.avif"} alt="star icon" className="w-6 h-6" />
+                            <img key={index} src={index < Math.round(restaurant.googleMapRating) ? starColor : starClay} alt="star icon" className="w-6 h-6" />
                         ))
                     }
                 </div>
