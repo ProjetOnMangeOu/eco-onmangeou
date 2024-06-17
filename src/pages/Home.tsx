@@ -5,7 +5,6 @@ const Home = () => {
   return (
     <div className="layout max-w-screen-lg flex flex-auto flex-col gap-12 items-center justify-center px-4 py-12 relative">
       
-      {/* <img src="/src/assets/logo.svg" alt="Logo onmangeou" className="translate-x-[3%] w-2/4 sm:max-w-xs" /> */}
       <Logo className="translate-x-[3%] w-2/4 h-fit sm:max-w-xs" />
       
       <span className="flex flex-col gap-3">
