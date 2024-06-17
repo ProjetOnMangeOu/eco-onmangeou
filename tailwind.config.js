@@ -1,11 +1,27 @@
 /** @type {import('tailwindcss').Config} */
+
+import defaultTheme from 'tailwindcss/defaultTheme';
+
 export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      xs: '475px',
+      '3xl': '1921px',
+      ...defaultTheme.screens,
+    },
+
     extend: {
+      fontFamily: {
+        primary: [
+          'Inter',
+          ...defaultTheme.fontFamily.sans,
+        ],
+      },
+
       colors: {
         "background": "#fffbf4",
         "primary": {
