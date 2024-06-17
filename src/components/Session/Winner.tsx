@@ -21,10 +21,10 @@ const Winner = () => {
     }, [likedRestaurants]);
 
     return (
-        <>
-            <h2>And the winner is ...</h2>
+        <div className="w-full flex flex-col justify-center items-center gap-6">
+            <h3 className="text-center">Et le gagnant est ...</h3>
             <RestaurantCard restaurant={winner!} />
-        </>
+        </div>
     );
 };
 

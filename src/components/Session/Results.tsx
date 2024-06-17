@@ -18,9 +18,10 @@ const Results = () => {
     }, [likedRestaurants]);
 
     return (
-        <div className="w-full p-4 flex flex-col items-center gap-3 bg-primary-400 border-2 border-primary-300 rounded-xl">
+        <div className="lg:col-start-4 w-full h-fit p-4 flex flex-col items-center gap-3 bg-primary-400 border-2 border-primary-300 rounded-xl">
             <h3 className="">Top 5 des restaurants</h3>
             <ol className="w-full flex flex-col gap-2">
+                {likedRestaurants.length <= 0 && <p className="text-center">Aucun restaurant n'a été liké</p>}
                 {
                     Object.keys(votes)
                         .sort((a, b) => votes[b] - votes[a])

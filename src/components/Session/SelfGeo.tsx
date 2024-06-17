@@ -24,7 +24,7 @@ const SelfGeo = () => {
     };
 
     return (
-        <form className="w-full flex flex-col gap-3 items-center bg-primary-400 border-2 border-primary-300 p-4 rounded-xl">
+        <form className="lg:row-start-1 lg:col-start-4 w-full flex flex-col gap-3 items-center bg-primary-400 border-2 border-primary-300 p-4 rounded-xl">
             <h3 className="flex items-center gap-2">
                 <TbMapPinFilled />
                 <span>Localisation</span>
