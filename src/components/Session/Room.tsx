@@ -184,6 +184,14 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
       dictionaries: [animals],
       style: 'capital'
     }));
+
+    return () => {
+      if (room) {
+        console.log('Leaving room');
+        room.leave();
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
