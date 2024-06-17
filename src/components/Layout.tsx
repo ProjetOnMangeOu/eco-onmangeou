@@ -17,6 +17,15 @@ const Layout = () => {
       </header>
 
       <Outlet />
+
+      <footer className="flex flex-col items-center justify-center p-4">
+        <p className="text-center text-neutral-500 text-sm">
+          &copy; {new Date().getFullYear()} - <strong className="font-semibold">OnMangeOù ?</strong> - Tous droits réservés
+        </p>
+        <p className="text-center text-neutral-500 text-sm">
+          Réalisé avec ❤️ par Maxime, Pierre, Rafael et <a href="https://www.sygix.fr/">Simon</a>
+        </p>
+      </footer>
     </>
   );
 };

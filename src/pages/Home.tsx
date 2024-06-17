@@ -3,7 +3,7 @@ import Logo from "../assets/logo.svg?react";
 
 const Home = () => {
   return (
-    <div className="layout max-w-screen-lg flex flex-auto flex-col gap-12 items-center justify-center px-4 py-12 relative">
+    <div className="layout max-w-screen-lg flex flex-auto flex-col gap-12 items-center justify-center px-4 py-6 relative">
       
       <Logo className="translate-x-[3%] w-2/4 h-fit sm:max-w-xs" />
       
