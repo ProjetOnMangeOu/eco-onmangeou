@@ -35,6 +35,8 @@ const RoomContext = createContext<{
   setGeoLocation: (geo: GeoLocation) => void;
   likedRestaurants: Restaurant[];
   likeARestaurant: (restaurant: Restaurant) => void;
+  searchDistance: number;
+  changeSearchDistance: (distance: number) => void;
 }>({
   room: null,
   roomState: RoomState.Waiting,
@@ -45,6 +47,8 @@ const RoomContext = createContext<{
   setGeoLocation: () => { },
   likedRestaurants: [],
   likeARestaurant: () => {},
+  searchDistance: 2500,
+  changeSearchDistance: () => {},
 });
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -66,6 +70,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   const [roomState, setRoomState] = useState<RoomState>(RoomState.Waiting);
   const [peers, setPeers] = useState<Peer[]>([]);
   const [likedRestaurants, setLikedRestaurants] = useState<Restaurant[]>([]);
+  const [searchDistance, setSearchDistance] = useState<number>(2500); // [meters]
 
   // Room setup
   const config: BaseRoomConfig & RelayConfig = { appId: 'onmangeou' };
@@ -75,6 +80,7 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   const [sendRoomState, getRoomState] = room.makeAction('room-state');
   const [sendName, getName] = room.makeAction('name');
   const [sendLikedRestaurant, getLikedRestaurant] = room.makeAction('liked-place');
+  const [sendSearchDistance, getSearchDistance] = room.makeAction('distance');
 
   // Methods
   const changeRoomState = (state: RoomState) => {
@@ -104,6 +110,11 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     sendLikedRestaurant({ ...restaurant });
   };
 
+  const changeSearchDistance = (distance: number) => {
+    setSearchDistance(distance);
+    sendSearchDistance({ distance });
+  };
+
   // Room listeners
   room.onPeerJoin(peerId => {
     console.log('[Event] peer join : ', peerId);
@@ -113,7 +124,11 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     }
 
     setPeers(peers => [...peers, { id: peerId, name: '...' }]);
-    sendName({ name: myRandomName });
+    // add some delay to avoid ignoring the message if the peer is not yet in the list
+    setTimeout(() => {
+      sendName({ name: myRandomName });
+      if(searchDistance !== 2500) sendSearchDistance({ distance: searchDistance });
+    }, 100);
   });
 
   room.onPeerLeave(peerId => {
@@ -153,6 +168,15 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
     setLikedRestaurants((prevState) => [...prevState, likedRestaurantData]);
   });
 
+  getSearchDistance((data, peerId) => {
+    console.log('[Event] search distance : ', data);
+
+    const distanceData = data as { distance: number };
+    if (!peers.find((peer) => peer.id === peerId)) return; // Ignore messages from unknown peers
+    console.log('Setting search distance to : ', distanceData.distance);
+    setSearchDistance(distanceData.distance);
+  });
+
   // Initial setup
   useEffect(() => {
     getGeoLocation();
@@ -179,6 +203,8 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
       setGeoLocation,
       likedRestaurants,
       likeARestaurant,
+      searchDistance,
+      changeSearchDistance
     }}>
       {children}
     </RoomContext.Provider>

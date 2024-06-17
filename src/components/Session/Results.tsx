@@ -18,16 +18,21 @@ const Results = () => {
     }, [likedRestaurants]);
 
     return (
-        <>
+        <div className="w-56">
             <h2 className="text-xl font-bold">Results</h2>
             <ul>
-                {Object.keys(votes).map((restaurantId) => (
-                    <li key={restaurantId}>
-                        {likedRestaurants.find((res) => res.documentId === restaurantId)?.name} : {votes[restaurantId]}
-                    </li>
-                ))}
+                {
+                    Object.keys(votes)
+                        .sort((a, b) => votes[b] - votes[a])
+                        .slice(0, 5)
+                        .map((restaurantId) => (
+                            <li key={restaurantId}>
+                                {likedRestaurants.find((res) => res.documentId === restaurantId)?.name} : {votes[restaurantId]}
+                            </li>
+                        ))
+                }
             </ul>
-        </>
+        </div>
     );
 };
 

@@ -1,4 +1,5 @@
 import { useRoomContext } from "./Room";
+import { TbUser, TbUserBolt } from "react-icons/tb";
 
 const PeersList = () => {
 
@@ -6,12 +7,18 @@ const PeersList = () => {
   const self = useRoomContext().self;
 
   return (
-    <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4">
-      <h2 className="text-blue-800 font-semibold">Me : {self?.name} ({self?.id})</h2>
-      <h2 className="text-green-800 font-semibold">Connected Peers :</h2>
+    <div className="flex gap-3 flex-col items-center border-2 border-primary-300 bg-primary-400 rounded-lg p-4">
+      <h3>Membres de la session :</h3>
+      <div className="flex gap-2 items-center">
+        <TbUser className="w-6 h-6" />
+        <p>Moi : {self?.name}</p>
+      </div>
       <ul>
         {peers.map((peer, index) => (
-          <li key={`${peer.id}-${index}`} className='text-geen-400'>{peer.name} ({peer.id})</li>
+          <li key={`${peer.id}-${index}`} className='flex gap-2 items-center'>
+            <TbUserBolt className="w-6 h-6" />
+            {peer.name}
+          </li>
         ))}
       </ul>
     </div>

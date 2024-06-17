@@ -33,7 +33,6 @@ const fetchRestaurants = async ({ geoLocation, radius }: { geoLocation: GeoLocat
         ]
     );
 
-    console.log('results : ', results);
     return results.documents.map((doc) => {
         return {
             documentId: doc.$id,

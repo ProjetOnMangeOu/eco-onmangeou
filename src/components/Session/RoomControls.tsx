@@ -19,20 +19,20 @@ const RoomControls = () => {
     };
 
     return (
-        <div className="flex flex-wrap justify-between gap-4 border-2 border-neutral-800 rounded-md p-4">
+        <div className="w-full flex flex-wrap gap-4">
             <button
-                className="px-2 py-1 rounded-full bg-green-400 min-w-24 disabled:cursor-not-allowed"
+                className='flex-1 bg-green-500 transition-all duration-300 hover:bg-green-400 hover:shadow-lg px-4 py-2 rounded-lg flex justify-center items-center gap-1 disabled:cursor-not-allowed'
                 onClick={startSession}
                 disabled={roomState !== RoomState.Waiting}
             >
-                Start
+                Commencer
             </button>
             <button
-                className="px-2 py-1 rounded-full bg-red-400 min-w-24 disabled:cursor-not-allowed"
+                className='flex-1 bg-secondary-500 transition-all duration-300 hover:bg-secondary-400 hover:shadow-lg px-4 py-2 rounded-lg flex justify-center items-center gap-1 disabled:cursor-not-allowed'
                 onClick={stopSession}
                 disabled={roomState !== RoomState.Playing}
             >
-                Stop
+                Finir
             </button>
         </div>
     );

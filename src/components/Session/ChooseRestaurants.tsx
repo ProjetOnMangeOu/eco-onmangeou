@@ -10,7 +10,6 @@ const ChooseRestaurants = () => {
 
     const restaurantList = useMemo(() => {
         if (roomState !== RoomState.Playing) return [];
-        console.log('Fetching restaurants...');
         // Fetch the restaurants here
         const fakeRestaurants = [];
         for (let i = 1; i <= 10; i++) {
@@ -22,9 +21,9 @@ const ChooseRestaurants = () => {
                 long: 0,
                 phone: '123456789',
                 googleMapRating: 4.5,
-                image: 'https://via.placeholder.com/150',
+                image: 'https://picsum.photos/500',
                 gmapLink: 'https://www.google.com/maps',
-                website: 'https://www.google.com',
+                website: 'https://www.sygix.fr',
                 calculatedDistance: i * 100,
                 restaurantType: ['type1', 'type2'],
             });
@@ -42,21 +41,23 @@ const ChooseRestaurants = () => {
     };
 
     return (
-        <div>
+        <div className="w-full grid grid-cols-2 gap-6">
             {restaurantList[displayedRestaurantIndex] && (
                 <>
-                    <RestaurantCard restaurant={restaurantList[displayedRestaurantIndex]} />
                     <button
-                        className="px-2 py-1 rounded-full bg-green-400 min-w-24 disabled:cursor-not-allowed"
+                        className="justify-self-end order-1 p-2 rounded-full bg-secondary-500 hover:bg-secondary-400 w-fit transition-all duration-300 hover:shadow-xl"
                         onClick={() => nextRestaurant(false)}
                     >
-                        dislike
+                        <img src="./src/assets/thumb-down-dynamic-color.avif" alt="dislike" className="w-12 h-12" />
                     </button>
+                    <div className="col-span-2 w-full flex justify-center">
+                        <RestaurantCard restaurant={restaurantList[displayedRestaurantIndex]} />
+                    </div>
                     <button
-                        className="px-2 py-1 rounded-full bg-red-400 min-w-24 disabled:cursor-not-allowed"
+                        className="justify-self-start order-2 p-2 rounded-full bg-secondary-500 hover:bg-secondary-400 marker:w-fit transition-all duration-300 hover:shadow-xl"
                         onClick={() => nextRestaurant()}
                     >
-                        Like
+                        <img src="./src/assets/thumb-up-dynamic-color.avif" alt="like" className="w-12 h-12" />
                     </button>
                 </>
             )}

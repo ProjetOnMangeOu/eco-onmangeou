@@ -9,20 +9,20 @@ const Session = () => {
     const [searchParams] = useSearchParams();
     const sessionId = searchParams.get("id");
 
-    if (!sessionId) {
-        return <div>Session id not found</div>;
-    }
-
     return (
-        <main className="flex flex-auto gap-6 flex-col items-center px-4">
-            <p className="text-center">Session : {sessionId}</p>
-            <div className="w-full max-w-screen-md flex flex-col gap-6">
-                <Room sessionId={sessionId}>
-                    <PeersList />
-                    <RoomContent />
-                    <RoomControls />
-                </Room>
-            </div>
+        <main className="layout max-w-screen-lg flex gap-3 flex-auto flex-col px-4 py-6 relative">
+            {sessionId === null && <h2>Session not found</h2>}
+            {sessionId !== null && (
+                <>
+                    <div className="w-full max-w-screen-md flex flex-auto flex-col gap-6">
+                        <Room sessionId={sessionId}>
+                            <RoomContent />
+                            <RoomControls />
+                            <PeersList />
+                        </Room>
+                    </div>
+                </>
+            )}
         </main>
     );
 };

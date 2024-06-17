@@ -8,7 +8,7 @@ const Home = () => {
       <Logo className="translate-x-[3%] w-2/4 h-fit sm:max-w-xs" />
       
       <span className="flex flex-col gap-3">
-        <h1 className="h0 text-center">Découvrez votre prochain coup de 💜 culinaire</h1>
+        <h1 className="h0 text-center">Trouvez votre prochain coup de 💜 culinaire</h1>
         <p className="text-center">Les meilleurs restaurants à proximité. Commencez votre aventure gastronomique dès maintenant !</p>
       </span>
       

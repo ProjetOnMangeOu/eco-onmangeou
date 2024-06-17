@@ -10,37 +10,28 @@ const RoomContent = () => {
     const peers = useRoomContext().peers;
 
     return (
-        <div className="flex flex-col flex-wrap border-2 border-neutral-800 rounded-md p-4">
-            {roomState === RoomState.Waiting && peers.length <= 0 && (
-                <>
-                    <h2 className="text-xl font-bold">Waiting other people to start</h2>
-                    <SelfGeo />
-                </>
-            )}
+        <>
+            {roomState === RoomState.Waiting && <SelfGeo />}
+            <div className="flex flex-auto gap-6 flex-wrap w-full justify-center">
+                {roomState === RoomState.Waiting && peers.length <= 0 && (<h3 className="text-xl font-bold">En attente d'autres personnes...</h3>)}
 
-            {roomState === RoomState.Waiting && peers.length >= 1 && (
-                <>
-                    <h2 className="text-xl font-bold">Ready to start</h2>
-                    <SelfGeo />
-                </>
-            )}
+                {roomState === RoomState.Waiting && peers.length >= 1 && (<h3 className="text-xl font-bold">Prêt à commencer !</h3>)}
 
-            {roomState === RoomState.Playing && (
-                <>
-                    <h2 className="text-xl font-bold">Playing</h2>
-                    <ChooseRestaurants />
-                    <Results />
-                </>
-            )}
+                {roomState === RoomState.Playing && (
+                    <>
+                        <ChooseRestaurants />
+                        <Results />
+                    </>
+                )}
 
-            {roomState === RoomState.Finished && (
-                <>
-                    <h2 className="text-xl font-bold">Session finished</h2>
-                    <Winner />
-                    {/* Display the winner */}
-                </>
-            )}
-        </div>
+                {roomState === RoomState.Finished && (
+                    <>
+                        <h3 className="text-xl font-bold">Session terminée</h3>
+                        <Winner />
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 
