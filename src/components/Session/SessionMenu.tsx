@@ -32,20 +32,20 @@ const SessionMenu = () => {
 
       <span className='w-full flex gap-4'>
         <button
-          className='bg-secondary-500 transition-all duration-300 hover:bg-secondary-400 hover:shadow-lg px-4 py-2 w-full rounded-lg flex justify-center items-center gap-1'
+          className='bg-secondary-500 transition-all duration-300 hover:bg-secondary-400 hover:shadow-lg px-4 py-2 w-full rounded-xl flex justify-center items-center gap-1'
           onClick={() => copyToClipboard(sessionId)}
         >
           <TbClipboard className='w-6 h-6' />
           Copier
         </button>
         <button
-          className='bg-secondary-500 transition-all duration-300 hover:bg-secondary-400 hover:shadow-lg px-4 py-2 w-full rounded-lg flex justify-center items-center gap-1'
+          className='bg-secondary-500 transition-all duration-300 hover:bg-secondary-400 hover:shadow-lg px-4 py-2 w-full rounded-xl flex justify-center items-center gap-1'
           onClick={() => setSessionId(uuidv4())}
         ><TbArrowCapsule className='w-6 h-6' />Session ID</button>
       </span>
       
       <Link
-        className='bg-accent-500 transition-all duration-300 hover:bg-accent-400 hover:shadow-lg px-4 py-2 w-full rounded-lg flex justify-center items-center gap-1'
+        className='bg-accent-500 transition-all duration-300 hover:bg-accent-400 hover:shadow-lg px-4 py-2 w-full rounded-xl flex justify-center items-center gap-1'
         to={`/session?id=${sessionId}`}
       >Rejoindre la session</Link>
     </div>

@@ -7,7 +7,7 @@ const PeersList = () => {
   const self = useRoomContext().self;
 
   return (
-    <div className="flex gap-3 flex-col items-center border-2 border-primary-300 bg-primary-400 rounded-lg p-4">
+    <div className="flex gap-3 flex-col items-center border-2 border-primary-300 bg-primary-400 rounded-xl p-4">
       <h3>Membres de la session :</h3>
       <div className="flex gap-2 items-center">
         <TbUser className="w-6 h-6" />

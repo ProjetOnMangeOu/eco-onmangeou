@@ -1,5 +1,5 @@
+import { TbMapPinFilled } from "react-icons/tb";
 import { useRoomContext } from "./Room";
-import { HiLocationMarker } from "react-icons/hi";
 
 const SelfGeo = () => {
 
@@ -24,9 +24,9 @@ const SelfGeo = () => {
     };
 
     return (
-        <form className="w-full flex flex-col gap-3 items-center bg-primary-400 border-2 border-primary-300 p-4 rounded-lg">
+        <form className="w-full flex flex-col gap-3 items-center bg-primary-400 border-2 border-primary-300 p-4 rounded-xl">
             <h3 className="flex items-center gap-2">
-                <HiLocationMarker />
+                <TbMapPinFilled />
                 <span>Localisation</span>
             </h3>
             <div className="flex flex-wrap gap-3">

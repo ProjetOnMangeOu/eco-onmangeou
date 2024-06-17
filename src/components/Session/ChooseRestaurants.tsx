@@ -3,6 +3,7 @@ import { RoomState, useRoomContext } from "./Room";
 import RestaurantCard from "../RestaurantCard";
 import thumbDown from "../../assets/thumb-down-dynamic-color.avif";
 import thumbUp from "../../assets/thumb-up-dynamic-color.avif";
+import { TbAlertCircle } from "react-icons/tb";
 
 const ChooseRestaurants = () => {
     const [displayedRestaurantIndex, setDisplayedRestaurantIndex] = useState<number>(0);
@@ -64,7 +65,12 @@ const ChooseRestaurants = () => {
                 </>
             )}
             {!restaurantList[displayedRestaurantIndex] && (
-                <h2 className="text-xl font-bold">No more restaurants</h2>
+                <>
+                    <div className="col-span-2 text-center flex flex-col items-center">
+                        <TbAlertCircle className="w-8 h-8" />
+                        <h2>Plus de restaurant disponible dans cette zone 😅</h2>
+                    </div>
+                </>
             )}
         </div>
     );

@@ -14,6 +14,10 @@ export default {
       ...defaultTheme.screens,
     },
 
+    listStyleType: {
+      roman: 'upper-roman',
+    },
+
     extend: {
       fontFamily: {
         primary: [

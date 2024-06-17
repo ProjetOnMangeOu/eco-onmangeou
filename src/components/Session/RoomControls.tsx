@@ -21,14 +21,14 @@ const RoomControls = () => {
     return (
         <div className="w-full flex flex-wrap gap-4">
             <button
-                className='flex-1 bg-green-500 transition-all duration-300 hover:bg-green-400 hover:shadow-lg px-4 py-2 rounded-lg flex justify-center items-center gap-1 disabled:cursor-not-allowed'
+                className='flex-1 bg-green-500 transition-all duration-300 hover:bg-green-400 hover:shadow-lg px-4 py-2 rounded-xl flex justify-center items-center gap-1 disabled:cursor-not-allowed'
                 onClick={startSession}
                 disabled={roomState !== RoomState.Waiting}
             >
                 Commencer
             </button>
             <button
-                className='flex-1 bg-secondary-500 transition-all duration-300 hover:bg-secondary-400 hover:shadow-lg px-4 py-2 rounded-lg flex justify-center items-center gap-1 disabled:cursor-not-allowed'
+                className='flex-1 bg-secondary-500 transition-all duration-300 hover:bg-secondary-400 hover:shadow-lg px-4 py-2 rounded-xl flex justify-center items-center gap-1 disabled:cursor-not-allowed'
                 onClick={stopSession}
                 disabled={roomState !== RoomState.Playing}
             >
