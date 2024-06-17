@@ -20,7 +20,8 @@
     "react-router-dom": "^6.23.1",
     "trystero": "^0.18.0",
     "unique-names-generator": "^4.7.1",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "vite-plugin-svgr": "^4.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
