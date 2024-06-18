@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { TbArrowCapsule, TbClipboard } from "react-icons/tb";
+import QrCode from '../QrCode';
 
 const SessionMenu = () => {
   const [sessionId, setSessionId] = useState<string>('');
@@ -23,7 +24,9 @@ const SessionMenu = () => {
       </div>
 
 
+      <label htmlFor="session-id" className='hidden'>ID de la session</label>
       <input
+        id='session-id'
         type="text"
         className='w-full p-2 rounded-lg border-2 border-primary-300'
         value={sessionId}
@@ -48,6 +51,7 @@ const SessionMenu = () => {
         className='bg-accent-500 transition-all duration-300 hover:bg-accent-400 hover:shadow-lg px-4 py-2 w-full rounded-xl flex justify-center items-center gap-1'
         to={`/session?id=${sessionId}`}
       >Rejoindre la session</Link>
+      <QrCode sessionId={sessionId} />
     </div>
   );
 };

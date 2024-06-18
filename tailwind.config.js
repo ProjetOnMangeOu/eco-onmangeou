@@ -26,6 +26,10 @@ export default {
         ],
       },
 
+      transitionProperty: {
+        'max-height': 'max-height',
+      },
+
       colors: {
         "background": "#fffbf4",
         "primary": {
