@@ -56,7 +56,7 @@ const ChooseRestaurants = () => {
                         </button>
                     </div>
                     
-                    <div className="col-span-4 xs:order-2 w-full flex justify-center">
+                    <div className="col-span-2 xs:col-span-4 xs:order-2 w-full flex justify-center">
                         <RestaurantCard restaurant={restaurantList[displayedRestaurantIndex]} />
                     </div>
                     <div className="justify-self-start flex items-end order-3">
