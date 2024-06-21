@@ -1,38 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RoomState, useRoomContext } from "./Room";
 import RestaurantCard from "../RestaurantCard";
 import thumbDown from "../../assets/thumb-down-dynamic-color.avif";
 import thumbUp from "../../assets/thumb-up-dynamic-color.avif";
 import { TbAlertCircle } from "react-icons/tb";
+import fetchRestaurants, { Restaurant } from "../../lib/restaurants";
 
 const ChooseRestaurants = () => {
     const [displayedRestaurantIndex, setDisplayedRestaurantIndex] = useState<number>(0);
+    const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
+    const initialized = useRef(false);
 
     const roomState = useRoomContext().roomState;
     const likeARestaurant = useRoomContext().likeARestaurant;
-
-    const restaurantList = useMemo(() => {
-        if (roomState !== RoomState.Playing) return [];
-        // Fetch the restaurants here
-        const fakeRestaurants = [];
-        for (let i = 1; i <= 10; i++) {
-            fakeRestaurants.push({
-                documentId: i.toString(),
-                name: `Restaurant ${i}`,
-                address: `Address ${i}`,
-                lat: 0,
-                long: 0,
-                phone: '123456789',
-                googleMapRating: 4.5,
-                image: 'https://picsum.photos/500',
-                gmapLink: 'https://www.google.com/maps',
-                website: 'https://www.sygix.fr',
-                calculatedDistance: i * 100,
-                restaurantType: ['type1', 'type2'],
-            });
-        }
-        return fakeRestaurants;
-    }, [roomState]);
+    const geoLocation = useRoomContext().geoLocation;
+    const radius = useRoomContext().searchDistance;
 
     const nextRestaurant = (liked = true) => {
         if (liked) {
@@ -42,6 +24,18 @@ const ChooseRestaurants = () => {
         }
         setDisplayedRestaurantIndex((state) => state + 1);
     };
+
+    useEffect(() => {
+        if (initialized.current || roomState !== RoomState.Playing) return;
+
+        const getRestaurants = async () => {
+            const restaurants = await fetchRestaurants({ geoLocation, radius });
+            setRestaurantList(restaurants);
+        };
+
+        getRestaurants();  
+        initialized.current = true;
+    }, [geoLocation, radius, roomState]);
 
     return (
         <div className="w-full grid grid-cols-2 xs:grid-cols-6 gap-6">
