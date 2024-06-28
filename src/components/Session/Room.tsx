@@ -73,7 +73,32 @@ const Room = ({ sessionId, children }: { sessionId: string; children: ReactNode 
   const [searchDistance, setSearchDistance] = useState<number>(2500); // [meters]
 
   // Room setup
-  const config: BaseRoomConfig & RelayConfig = { appId: 'onmangeou' };
+  const config: BaseRoomConfig & RelayConfig = {
+    appId: 'onmangeou', rtcConfig: {
+      iceServers: [
+        {
+          urls: "turn:eu.relay.metered.ca:80",
+          username: import.meta.env.VITE_METEREDCA_TURN_USERNAME,
+          credential: import.meta.env.VITE_METEREDCA_TURN_credential,
+        },
+        {
+          urls: "turn:eu.relay.metered.ca:80?transport=tcp",
+          username: import.meta.env.VITE_METEREDCA_TURN_USERNAME,
+          credential: import.meta.env.VITE_METEREDCA_TURN_credential,
+        },
+        {
+          urls: "turn:eu.relay.metered.ca:443",
+          username: import.meta.env.VITE_METEREDCA_TURN_USERNAME,
+          credential: import.meta.env.VITE_METEREDCA_TURN_credential,
+        },
+        {
+          urls: "turns:eu.relay.metered.ca:443?transport=tcp",
+          username: import.meta.env.VITE_METEREDCA_TURN_USERNAME,
+          credential: import.meta.env.VITE_METEREDCA_TURN_credential,
+        },
+      ]
+    }
+  };
   const room = joinRoom(config, sessionId);
   
   // Room actions

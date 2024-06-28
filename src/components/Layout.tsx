@@ -22,7 +22,7 @@ const Layout = () => {
           &copy; {new Date().getFullYear()} - <strong className="font-semibold">OnMangeOù ?</strong> - Tous droits réservés
         </p>
         <p className="text-center text-neutral-500 text-sm">
-          Réalisé avec ❤️ par Maxime, Pierre, Rafael et <a href="https://www.sygix.fr/">Simon</a>
+          Réalisé avec ❤️ par Maxime, Pierre, Raphael et <a href="https://www.sygix.fr/">Simon</a>
         </p>
       </footer>
     </>
